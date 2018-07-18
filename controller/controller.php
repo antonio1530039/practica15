@@ -411,6 +411,42 @@ class MVC{
 		
 	}
 
+  public function getSesionesController(){
+    $informacion = Crud::getSesionesControllerModel();//ejecucion del metodo del modelo
+    if(!empty($informacion)){
+      //si el resultado no esta vacio, imprimir los datos de los usuarios
+        foreach ($informacion as $row => $item) {
+            echo "<tr>";
+              echo "<td>".$item['matricula']."</td>";
+              echo "<td>".$item['nombre']."</td>";
+              echo "<td>".$item['actividad']."</td>";
+              echo "<td>".$item['hora']."</td>";
+              echo '<td><a href="'.$item["imagen"].'" id="ver_btn'.$item["id_alumno"].'" onclick="ver_imagen('.$item["id_alumno"].');">Ver</a></td>';
+              echo "<td><button type='button' id='borrar-".$item['id']."-".$item['matricula']."' class='btn btn-danger'><i class='fa fa-close'></i></button></td>";
+              echo "<td><button type='button' id='asistencia-".$item['id']."-".$item['matricula']."' class='btn btn-warning'><i class='fa fa-close'></i></button></td>";
+              //echo "<td><div class='checkbox'><label><input class='form_control' type='checkbox'></div></td>";
+            echo "</tr>";
+          }
+         
+      } 
+  }
+
+
+  public function getMatriculasSesionesController(){
+    $informacion = Crud::getSesionesControllerModel();//ejecucion del metodo del modelo
+    if(!empty($informacion)){
+      //si el resultado no esta vacio, imprimir los datos de los usuarios
+      for($i=0;$i<sizeof($informacion);$i++){
+        if($i!=sizeof($informacion)-1)
+          echo "'".$informacion[$i]['matricula']."',";
+        else
+          echo "'".$informacion[$i]['matricula']."'";
+      }
+       
+   }
+  }
+  
+
 
 	//funcion encargada de crear una tabla con los usuarios registrados en la base de datos
 	public function getGruposController(){ //parametro $idUser (el usuario actual)
@@ -614,10 +650,6 @@ class MVC{
     //peticion al modelo del registro de sesion
     $registro = Crud::registroSesionCaiModel($data);
     echo $registro;
-    if($registro != "success"){ //verificar la respuesta del modelo
-      echo "error";
-    }
-    
   }
 
 
@@ -1320,6 +1352,14 @@ class MVC{
 		}
 	}
 
+  //Funcion que dado un id y nombre de tabla, ejecuta el metodo del modelo y borra el registro especificado en base a la tabla
+  public function borrarSesionController($id){
+    //se ejecuta el metodo borrar del modelo mandando como paremtros los explicados anteriormente
+    //echo $id."<br>".$tabla;
+    $peticion = Crud::borrarXModel($id,"sesion_cai");
+    return $peticion;
+  }
+
 
   #REVISAR DISPONIBILIDAD DE DETERMINAOD CODIGO DE PRODUCTOS
   public function checkAvailabilityOfUserCodeController($code, $table, $nid){
@@ -1342,16 +1382,17 @@ class MVC{
   }
 
   public function sesion_caiHeaderAlumnosController(){
+    $total = Crud::contarAlumnosController();
     echo'
       <div style="" class="info-box bg-warning">
         <span class="info-box-icon"><i class="fa fa-calendar"></i></span>
 
         <div class="info-box-content">
           <span class="info-box-text">Alumnos en Aula</span>
-          <span class="info-box-number">10/10</span>
+          <span id="alumnos_dentro" class="info-box-number">'.$total.'/30</span>
 
           <div class="progress">
-            <div class="progress-bar" style="width: 70%"></div>
+            <div id="porcentage_dentro" class="progress-bar" style="width: '.($total*100/30).'%"></div>
           </div>
         </div>
         <!-- /.info-box-content -->

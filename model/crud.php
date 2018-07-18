@@ -15,6 +15,15 @@ class Crud extends Conexion{
 		$stmt->close();
 	}
 
+	//Obtener el total de alumnos
+	public function contarAlumnosController(){
+		$stmt = Conexion::conectar()->prepare("SELECT COUNT(*) FROM sesion_cai WHERE fecha = CURDATE() AND hora >= DATE_FORMAT(NOW(), '%k:00:00') AND hora <= DATE_FORMAT(NOW(), '%k:59:59') AND asistencia=0"); //se prepara la conexion
+		//definicion de parametros
+		$stmt->execute(); //ejecucion mediante pdo
+		return $stmt->fetch()[0]; //se retorna lo asociado a la consulta
+		$stmt->close();
+	}
+
 	//metodo vistaXTablaModel: dado un nombre de tabla realiza un select y retorna el contenido de la tabla, considerando solamente registros no borrados.
 	public function vistaXTablaModel($table){
 		$stmt = Conexion::conectar()->prepare("SELECT * FROM $table"); //preparacion de la consulta SQL 
@@ -23,6 +32,16 @@ class Crud extends Conexion{
 		$stmt->close();
 
 	}
+
+	//metodo obtiene todas las sesiones de la hora y la fecha ingresada
+	public function getSesionesControllerModel(){
+		$stmt = Conexion::conectar()->prepare("SELECT a.id as id_alumno, a.imagen as imagen, sc.id as id, a.matricula as matricula, CONCAT(a.nombre,' ',a.apellidos) as nombre, ac.nombre as actividad, sc.hora as hora, sc.asistencia as asistencia FROM sesion_cai AS sc INNER JOIN alumnos AS a ON a.id=sc.id_alumno INNER JOIN actividades AS ac ON ac.id = sc.id_actividad WHERE fecha = CURDATE() AND hora >= DATE_FORMAT(NOW(), '%k:00:00') AND hora <= DATE_FORMAT(NOW(), '%k:59:59') AND asistencia=0"); //preparacion de la consulta SQL 
+		$stmt->execute(); //ejecucion de la consulta
+		return $stmt->fetchAll(); //se retorna en un array asociativo el resultado de la consulta
+		$stmt->close();
+	}
+
+	
 
 	//metodo registroUsuarioModel: dado un arreglo asociativo de datos, se inserta en la tabla usuarios los datos especificados
 	//los usuarios pueden ser de tipo (maestro o encargado)
@@ -105,17 +124,19 @@ class Crud extends Conexion{
 
 	//metodo registroUnidadModel: dado un arreglo asociativo de datos, se inserta en la tabla unidades los datos especificados
 	public function registroSesionCaiModel($data){
-		$stmt = Conexion::conectar()->prepare("INSERT INTO sesion_cai(hora, fecha, id_unidad, id_alumno, id_encargado, id_actividad, asistencia) VALUES(DATE_FORMAT(NOW(), '%H'), CURDATE(), :id_unidad, :id_alumno, :id_encargado, :id_actividad, :asistencia)");
+		$stmt = Conexion::conectar()->prepare("INSERT INTO sesion_cai(hora, fecha, id_unidad, id_alumno, id_encargado, id_actividad, asistencia) VALUES(DATE_FORMAT(NOW(), '%k:%i:%s'), CURDATE(), :id_unidad, :id_alumno, :id_encargado, :id_actividad, :asistencia)");
 		//preparacion de parametros
 		$stmt->bindParam(":id_unidad", $data['id_unidad']);
 		$stmt->bindParam(":id_alumno", $data['id_alumno']);
 		$stmt->bindParam(":id_encargado", $data['id_encargado']);
 		$stmt->bindParam(":id_actividad", $data['id_actividad']);
 		$stmt->bindParam(":asistencia", $data['asistencia']);
-		if($stmt->execute()) //ejecucion
-			return "success"; //respuesta
+		if($stmt->execute()){ //ejecucion
+			$stmt = Conexion::conectar()->prepare("SELECT MAX(id) AS id, DATE_FORMAT(NOW(), '%k:%i:%s') AS hora FROM sesion_cai");
+			$stmt->execute();
+			return json_encode($stmt->fetch()); //respuesta
+		}
 		else{
-			print_r($stmt->errorInfo());
 			return "error";
 		}
 		$stmt->close();
@@ -250,7 +271,6 @@ class Crud extends Conexion{
 			return "error";
 		$stmt->close();
 	}
-
 
 	#OBTIENE SI HAY DISPONIBILIDAD DEL PRODUCTO
 	#-------------------------------------

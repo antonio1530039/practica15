@@ -2,8 +2,8 @@
 <html>
 <head>
 <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Font Awesome -->
@@ -30,55 +30,53 @@
   <link rel="stylesheet" href="view/plugins/datatables/dataTables.bootstrap4.css">
 
 
-    <!-- Select2 -->
+  <!-- jQuery -->
+  <script src="view/plugins/jquery/jquery.min.js"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+  <!-- Select2 -->
   <link rel="stylesheet" href="view/plugins/select2/select2.min.css">
   <link rel="stylesheet" href="view/plugins/bootstrap/css/bootstrap.min.css">
   <!--script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script-->
   <script src="view/dist/js/plugins/sweetalert/sweetalert.js"></script>
     <!--script src="view/dist/js/plugins/sweetalert/sweetalert.min.js"></script-->
-    <link rel="stylesheet" href="view/dist/js/plugins/sweetalert/sweetalert.css">
-      
-      <!-- jQuery -->
-<script src="view/plugins/jquery/jquery.min.js"></script>
+  <link rel="stylesheet" href="view/dist/js/plugins/sweetalert/sweetalert.css">
 
-<script src="view/plugins/bootstrap/js/bootstrap.min.js"></script>
+  <script src="view/plugins/bootstrap/js/bootstrap.min.js"></script>
 
 
-<!-- DataTables -->
-<script src="view/plugins/datatables/jquery.dataTables.js"></script>
-<script src="view/plugins/datatables/dataTables.bootstrap4.js"></script>
-<script src="view/plugins/datatables/dataTables.min.js"></script>
-<script src="view/plugins/datatables/dataTables.buttons.min.js"></script>
-<script src="view/plugins/datatables/buttons.flash.min.js"></script>
-<script src="view/plugins/datatables/jszip.min.js"></script>
-<script src="view/plugins/datatables/pdfmake.min.js"></script>
-<script src="view/plugins/datatables/vfs_fonts.js"></script>
-<script src="view/plugins/datatables/buttons.html5.min.js"></script>
-<script src="view/plugins/datatables/buttons.print.min.js"></script>
+  <!-- DataTables -->
+  <script src="view/plugins/datatables/jquery.dataTables.js"></script>
+  <script src="view/plugins/datatables/dataTables.bootstrap4.js"></script>
+  <script src="view/plugins/datatables/dataTables.buttons.min.js"></script>
+  <script src="view/plugins/datatables/buttons.flash.min.js"></script>
+  <script src="view/plugins/datatables/jszip.min.js"></script>
+  <script src="view/plugins/datatables/pdfmake.min.js"></script>
+  <script src="view/plugins/datatables/vfs_fonts.js"></script>
+  <script src="view/plugins/datatables/buttons.html5.min.js"></script>
+  <script src="view/plugins/datatables/buttons.print.min.js"></script>
 
+  <!-- daterangepicker -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
+  <script src="view/plugins/daterangepicker/daterangepicker.js"></script>
+  <!-- datepicker -->
+  <script src="view/plugins/datepicker/bootstrap-datepicker.js"></script>
+  <!-- Bootstrap WYSIHTML5 -->
+  <script src="view/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+  <!-- Slimscroll -->
+  <script src="view/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+  <!-- FastClick -->
+  <script src="view/plugins/fastclick/fastclick.js"></script>
+  <!-- AdminLTE App -->
+  <script src="view/dist/js/adminlte.js"></script>
+  <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+  <script src="view/dist/js/pages/dashboard.js"></script>
+  <!-- AdminLTE for demo purposes -->
+  <script src="view/dist/js/demo.js"></script>
+  <!-- Select2 -->
+  <script src="view/plugins/select2/select2.full.min.js"></script>
 
-
-
-
-<!-- daterangepicker -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
-<script src="view/plugins/daterangepicker/daterangepicker.js"></script>
-<!-- datepicker -->
-<script src="view/plugins/datepicker/bootstrap-datepicker.js"></script>
-<!-- Bootstrap WYSIHTML5 -->
-<script src="view/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
-<!-- Slimscroll -->
-<script src="view/plugins/slimScroll/jquery.slimscroll.min.js"></script>
-<!-- FastClick -->
-<script src="view/plugins/fastclick/fastclick.js"></script>
-<!-- AdminLTE App -->
-<script src="view/dist/js/adminlte.js"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="view/dist/js/pages/dashboard.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="view/dist/js/demo.js"></script>
-<!-- Select2 -->
-<script src="view/plugins/select2/select2.full.min.js"></script>
+  <link rel=icon href=./model/images/logo.png>
 </head>
 <body class="hold-transition sidebar-mini">
 
