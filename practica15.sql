@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.4
+-- version 4.7.7
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 13-07-2018 a las 00:16:49
--- Versión del servidor: 10.1.26-MariaDB
--- Versión de PHP: 7.1.9
+-- Host: localhost
+-- Generation Time: Jul 19, 2018 at 01:52 AM
+-- Server version: 10.1.30-MariaDB
+-- PHP Version: 7.0.27
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,13 +19,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `practica15`
+-- Database: `practica15`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `actividades`
+-- Table structure for table `actividades`
 --
 
 CREATE TABLE `actividades` (
@@ -34,7 +34,7 @@ CREATE TABLE `actividades` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Volcado de datos para la tabla `actividades`
+-- Dumping data for table `actividades`
 --
 
 INSERT INTO `actividades` (`id`, `nombre`) VALUES
@@ -46,7 +46,7 @@ INSERT INTO `actividades` (`id`, `nombre`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `alumnos`
+-- Table structure for table `alumnos`
 --
 
 CREATE TABLE `alumnos` (
@@ -60,17 +60,18 @@ CREATE TABLE `alumnos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Volcado de datos para la tabla `alumnos`
+-- Dumping data for table `alumnos`
 --
 
 INSERT INTO `alumnos` (`id`, `matricula`, `nombre`, `apellidos`, `id_carrera`, `id_grupo`, `imagen`) VALUES
 (9, '1530039', 'Jose Antonio', 'Molina De la Fuente', 3, 2, 'model/uploads/4fd66ac4c49ae08c5d3afb06bed56a46.png'),
-(11, '1530028', 'Sofia', 'Lopez', 3, 5, 'model/uploads/219f18ec5f7c05a1a8a919b15cabf54f.jpeg');
+(11, '1530028', 'Sofia', 'Lopez', 3, 5, 'model/uploads/219f18ec5f7c05a1a8a919b15cabf54f.jpeg'),
+(12, '1530061', 'Erick', 'Elizondo', 3, 2, 'model/uploads/e21ddca0341e25751cf21749635c62a7.png');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `carreras`
+-- Table structure for table `carreras`
 --
 
 CREATE TABLE `carreras` (
@@ -79,7 +80,7 @@ CREATE TABLE `carreras` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Volcado de datos para la tabla `carreras`
+-- Dumping data for table `carreras`
 --
 
 INSERT INTO `carreras` (`id`, `nombre`) VALUES
@@ -92,7 +93,7 @@ INSERT INTO `carreras` (`id`, `nombre`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `grupos`
+-- Table structure for table `grupos`
 --
 
 CREATE TABLE `grupos` (
@@ -102,7 +103,7 @@ CREATE TABLE `grupos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Volcado de datos para la tabla `grupos`
+-- Dumping data for table `grupos`
 --
 
 INSERT INTO `grupos` (`id`, `nombre`, `id_maestro`) VALUES
@@ -112,12 +113,12 @@ INSERT INTO `grupos` (`id`, `nombre`, `id_maestro`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `sesion_cai`
+-- Table structure for table `sesion_cai`
 --
 
 CREATE TABLE `sesion_cai` (
   `id` int(11) NOT NULL,
-  `hora` int(11) NOT NULL,
+  `hora` time NOT NULL,
   `fecha` date NOT NULL,
   `id_unidad` int(11) NOT NULL,
   `id_alumno` int(11) NOT NULL,
@@ -126,10 +127,21 @@ CREATE TABLE `sesion_cai` (
   `asistencia` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `sesion_cai`
+--
+
+INSERT INTO `sesion_cai` (`id`, `hora`, `fecha`, `id_unidad`, `id_alumno`, `id_encargado`, `id_actividad`, `asistencia`) VALUES
+(82, '17:01:11', '2018-07-18', 2, 9, 1, 2, 0),
+(86, '17:59:36', '2018-07-18', 2, 11, 1, 2, 0),
+(88, '18:02:54', '2018-07-18', 2, 9, 1, 2, 0),
+(89, '18:03:02', '2018-07-18', 2, 12, 1, 2, 0),
+(90, '18:09:41', '2018-07-18', 2, 11, 1, 2, 0);
+
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `unidades`
+-- Table structure for table `unidades`
 --
 
 CREATE TABLE `unidades` (
@@ -140,17 +152,17 @@ CREATE TABLE `unidades` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Volcado de datos para la tabla `unidades`
+-- Dumping data for table `unidades`
 --
 
 INSERT INTO `unidades` (`id`, `nombre`, `fecha_inicio`, `fecha_fin`) VALUES
 (2, 'Unidad 1', '2018-07-09', '2018-07-31'),
-(3, 'Unidad 3', '2018-07-10', '2018-07-30');
+(3, 'Unidad 3', '2018-07-31', '2018-08-08');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `usuarios`
+-- Table structure for table `usuarios`
 --
 
 CREATE TABLE `usuarios` (
@@ -164,7 +176,7 @@ CREATE TABLE `usuarios` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Volcado de datos para la tabla `usuarios`
+-- Dumping data for table `usuarios`
 --
 
 INSERT INTO `usuarios` (`id`, `codigo`, `nombre`, `apellidos`, `email`, `password`, `tipo`) VALUES
@@ -173,17 +185,17 @@ INSERT INTO `usuarios` (`id`, `codigo`, `nombre`, `apellidos`, `email`, `passwor
 (9, 'yuri123', 'Yuridia', 'Montelongo', 'yuri@gmail.com', 'yuri123', 'teacher');
 
 --
--- Índices para tablas volcadas
+-- Indexes for dumped tables
 --
 
 --
--- Indices de la tabla `actividades`
+-- Indexes for table `actividades`
 --
 ALTER TABLE `actividades`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `alumnos`
+-- Indexes for table `alumnos`
 --
 ALTER TABLE `alumnos`
   ADD PRIMARY KEY (`id`),
@@ -192,20 +204,20 @@ ALTER TABLE `alumnos`
   ADD KEY `id_carrera` (`id_carrera`);
 
 --
--- Indices de la tabla `carreras`
+-- Indexes for table `carreras`
 --
 ALTER TABLE `carreras`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `grupos`
+-- Indexes for table `grupos`
 --
 ALTER TABLE `grupos`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_maestro` (`id_maestro`);
 
 --
--- Indices de la tabla `sesion_cai`
+-- Indexes for table `sesion_cai`
 --
 ALTER TABLE `sesion_cai`
   ADD PRIMARY KEY (`id`),
@@ -215,83 +227,83 @@ ALTER TABLE `sesion_cai`
   ADD KEY `id_actividad` (`id_actividad`);
 
 --
--- Indices de la tabla `unidades`
+-- Indexes for table `unidades`
 --
 ALTER TABLE `unidades`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `usuarios`
+-- Indexes for table `usuarios`
 --
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `codigo` (`codigo`);
 
 --
--- AUTO_INCREMENT de las tablas volcadas
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de la tabla `actividades`
+-- AUTO_INCREMENT for table `actividades`
 --
 ALTER TABLE `actividades`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT de la tabla `alumnos`
+-- AUTO_INCREMENT for table `alumnos`
 --
 ALTER TABLE `alumnos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
--- AUTO_INCREMENT de la tabla `carreras`
+-- AUTO_INCREMENT for table `carreras`
 --
 ALTER TABLE `carreras`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT de la tabla `grupos`
+-- AUTO_INCREMENT for table `grupos`
 --
 ALTER TABLE `grupos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT de la tabla `sesion_cai`
+-- AUTO_INCREMENT for table `sesion_cai`
 --
 ALTER TABLE `sesion_cai`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
 
 --
--- AUTO_INCREMENT de la tabla `unidades`
+-- AUTO_INCREMENT for table `unidades`
 --
 ALTER TABLE `unidades`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT de la tabla `usuarios`
+-- AUTO_INCREMENT for table `usuarios`
 --
 ALTER TABLE `usuarios`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- Restricciones para tablas volcadas
+-- Constraints for dumped tables
 --
 
 --
--- Filtros para la tabla `alumnos`
+-- Constraints for table `alumnos`
 --
 ALTER TABLE `alumnos`
   ADD CONSTRAINT `alumnos_ibfk_1` FOREIGN KEY (`id_grupo`) REFERENCES `grupos` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `alumnos_ibfk_2` FOREIGN KEY (`id_carrera`) REFERENCES `carreras` (`id`) ON DELETE CASCADE;
 
 --
--- Filtros para la tabla `grupos`
+-- Constraints for table `grupos`
 --
 ALTER TABLE `grupos`
   ADD CONSTRAINT `grupos_ibfk_1` FOREIGN KEY (`id_maestro`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE;
 
 --
--- Filtros para la tabla `sesion_cai`
+-- Constraints for table `sesion_cai`
 --
 ALTER TABLE `sesion_cai`
   ADD CONSTRAINT `sesion_cai_ibfk_1` FOREIGN KEY (`id_alumno`) REFERENCES `alumnos` (`id`) ON DELETE CASCADE,
