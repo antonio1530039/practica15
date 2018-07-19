@@ -268,18 +268,9 @@
           });
         });
 
-        $(document).ready(function() {
-          $('#ventasTable').DataTable({
-           "order": [[ 0, "desc" ]],
-           dom: 'Bfrtip',
-            buttons: [
-                  'copy', 'csv', 'excel', 'pdf', 'print'
-            ]
-          });
-        });
 
         $(document).ready(function() {
-          $('#detalleVenta').DataTable({
+          $('#reportesTable').DataTable({
            dom: 'Bfrtip',
             buttons: [
                   'copy', 'csv', 'excel', 'pdf', 'print'
