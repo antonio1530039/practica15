@@ -96,6 +96,7 @@
                         <h5 class="card-title ">Alumnos en sesion</h5>
                       </div>
                     <div class="card-body p-0">
+                    <br>
                     <div id="div_main_table" style="visibility: hidden" class="table-responsive">
                     <table width="100%" id="examplex" class="table table-bordered table-striped">
                       <thead>
