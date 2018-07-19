@@ -38,28 +38,28 @@
             <div class="card card-primary">
               <!-- /.card-header -->
               <!-- form start -->
-              <form role="form">
+              <form role="form" method="POST">
                 <div class="card-body">
                   <div class="form-group">
 
                     <div class="row">
                       <div class="col-6">
                         <label>Grupo:</label>
-                        <select class="form-control select2">
-                          <option>Grupo</option>
+                        <select class="form-control select2" name="grupo" required="">
+                         <?php
+                          $controller_reportes->getSelectForGruposReportes();
+                         ?>
                         </select>
                       </div>
                       <div class="col-3">
                         <label>Unidad:</label>
-                        <select class="form-control select2">
-                          <option>Unidad 1</option>
-                          <option>Unidad 2</option>
-                          <option>Unidad 3</option>
+                        <select class="form-control select2" name="unidad" required="">
+                          <?php $controller_reportes->getSelectForUnidades(); ?>
                         </select>
                       </div>
                       <div class="col-3">
                         <label></label><br>
-                        <input type="submit" name="btn_agregar" value="Filtrar" class="btn btn-success form-control">
+                        <input type="submit" name="btn_filtrar" value="Filtrar" class="btn btn-success form-control">
                       </div>
                       
 
@@ -79,11 +79,18 @@
                     <div class="table-responsive">
                     <table width="100%" id="example1" class="table table-bordered table-striped">
                       <thead>
-                        <th>Alumno</th>
-                        <th>Periodo de sesiones</th>
+                        <th>Matricula</th>
+                        <th>Nombre</th>
+                        <th>Apellidos</th>
+                        <th>Grupo</th>
+                        <th>Unidad</th>
                         <th>Numero de horas</th>
                       </thead>
                       <tbody>
+                        <?php
+                          $controller_reportes->getReporteController();
+
+                        ?>
                        
                       </tbody>
                     </table>

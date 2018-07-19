@@ -24,6 +24,17 @@ class Crud extends Conexion{
 		$stmt->close();
 	}
 
+	//Se eliminan todas las sesiones que no sean de la sesion actual y no tengan asistencia
+	public function deleteSesionesSinAsistenciaModel(){
+		$stmt = Conexion::conectar()->prepare("DELETE FROM sesion_cai WHERE asistencia=0 AND ( ( hora < DATE_FORMAT(NOW(), '%k:00:00') OR hora > DATE_FORMAT(NOW(), '%k:59:59') ) OR fecha!=CURDATE())"); //se prepara la conexion
+		//definicion de parametros
+		if($stmt->execute())
+			return "success";
+		else
+			return "error";
+		$stmt->close();
+	}
+
 	//metodo vistaXTablaModel: dado un nombre de tabla realiza un select y retorna el contenido de la tabla, considerando solamente registros no borrados.
 	public function vistaXTablaModel($table){
 		$stmt = Conexion::conectar()->prepare("SELECT * FROM $table"); //preparacion de la consulta SQL 
@@ -38,6 +49,16 @@ class Crud extends Conexion{
 		$stmt = Conexion::conectar()->prepare("SELECT a.id as id_alumno, a.imagen as imagen, sc.id as id, a.matricula as matricula, CONCAT(a.nombre,' ',a.apellidos) as nombre, ac.nombre as actividad, sc.hora as hora, sc.asistencia as asistencia FROM sesion_cai AS sc INNER JOIN alumnos AS a ON a.id=sc.id_alumno INNER JOIN actividades AS ac ON ac.id = sc.id_actividad WHERE fecha = CURDATE() AND hora >= DATE_FORMAT(NOW(), '%k:00:00') AND hora <= DATE_FORMAT(NOW(), '%k:59:59') AND asistencia=0"); //preparacion de la consulta SQL 
 		$stmt->execute(); //ejecucion de la consulta
 		return $stmt->fetchAll(); //se retorna en un array asociativo el resultado de la consulta
+		$stmt->close();
+	}
+
+	public function setAsistenciaModel($id){
+		$stmt = Conexion::conectar()->prepare("UPDATE sesion_cai SET asistencia = 1 WHERE id = :id");
+		$stmt->bindParam(":id", $id);
+		if($stmt->execute())
+			return "success";
+		else
+			return "error";
 		$stmt->close();
 	}
 
@@ -140,6 +161,20 @@ class Crud extends Conexion{
 			return "error";
 		}
 		$stmt->close();
+	}
+
+	//Obtiene la hora del servidor
+	public function getServerHour(){
+		$stmt = Conexion::conectar()->prepare("SELECT DATE_FORMAT(NOW(), '%k:%i:%s') AS hora");
+		$stmt->execute();
+		return $stmt->fetch()[0]; //respuesta
+	}
+
+	//Obtiene la fecha actual del servidor
+	public function getServerDate(){
+		$stmt = Conexion::conectar()->prepare("SELECT CURDATE() AS fecha");
+		$stmt->execute();
+		return $stmt->fetch()[0]; //respuesta
 	}
 
 	//metodo registroCarreraModel: dado un arreglo asociativo de datos, se inserta en la tabla carreras los datos especificados
@@ -318,6 +353,41 @@ class Crud extends Conexion{
 		return $stmt->fetch();
 
 		$stmt->close();
+	}
+
+	//metodo getReporteModel: dado un arreglo asociativo de datos, se obtienen los alumnos de un grupo y se filtra el numero de horas, segun la unidad y el id de grupo enviados como parametros
+	public function getReporteModel($data){
+		//Consulta SQL para traer las horas de los alumnos del grupo seleccionado segun el id de la unidad
+		$stmt = Conexion::conectar()->prepare("SELECT a.matricula as matricula, a.nombre as alumnoN, a.apellidos as alumnoA, u.nombre as unidad ,SUM(sc.asistencia) as numero_horas, g.nombre as grupo
+			FROM grupos as g
+			INNER JOIN alumnos as a ON g.id = a.id_grupo
+			INNER JOIN sesion_cai as sc on a.id = sc.id_alumno
+			INNER JOIN unidades as u on u.id = sc.id_unidad
+			WHERE g.id = :id_grupo and u.id = :id_unidad and sc.asistencia = 1
+			GROUP BY sc.id_alumno");
+		//preparacion de parametros
+		$stmt->bindParam(":id_grupo", $data['id_grupo']);
+		$stmt->bindParam(":id_unidad", $data['id_unidad']);
+		$stmt->execute(); //ejecucion de la consulta
+		return $stmt->fetchAll(); //se retorna en un array asociativo el resultado de la consulta
+		$stmt->close();
+	}
+
+
+
+	//metodo vistaGruposModel: dado un id de maestro se filtran los grupos del mismo y se retorna el resultado obtenido
+	public function vistaGruposModel($id_usuario){
+		if(empty($id_usuario)){ //verificar si esta vacio el id de usuario (maestro), se obtienen todos los grupos
+			$stmt = Conexion::conectar()->prepare("SELECT * FROM grupos"); //preparacion de la consulta SQL
+		}
+		else{ //si no esta vacio, se filtra por el id mandado como parametro
+			$stmt = Conexion::conectar()->prepare("SELECT * FROM grupos WHERE id_maestro = :id"); //preparacion de la consulta SQL
+			$stmt->bindParam(":id", $id_usuario);
+		}
+		$stmt->execute(); //ejecucion de la consulta
+		return $stmt->fetchAll(); //se retorna en un array asociativo el resultado de la consulta
+		$stmt->close();
+
 	}
 
 }

@@ -1236,6 +1236,12 @@ class MVC{
 		}
 	}
 
+  //Actualiza la asistencia de determinado registro en la lista de la sesion de cai
+  public function setAsistenciaController($id){
+    $peticion = Crud::setAsistenciaModel($id);
+    echo $peticion;
+  }
+
 
 	//funcion que verifica si se dio clic en el boton de actualizacion y realiza la actualizacon mediante la ejecucion del metodo del modelo
 	public function actualizarGrupoController(){ //se actualiza un grupo
@@ -1258,6 +1264,17 @@ class MVC{
 			}
 		}
 	}
+
+  //Se encarga de obtener la fecha actual del servidor mediante una consulta SQL
+  public function getServerHourController(){
+    $peticion = Crud::getServerHour();
+    echo $peticion;
+  }
+
+  public function getServerDateController(){
+    $peticion = Crud::getServerDate();
+    echo $peticion;
+  }
 
   //funcion que verifica si se dio clic en el boton de actualizacion y realiza la actualizacon mediante la ejecucion del metodo del modelo
   public function actualizarActividadController(){ //se actualiza una actividad
@@ -1360,7 +1377,7 @@ class MVC{
     return $peticion;
   }
 
-
+ 
   #REVISAR DISPONIBILIDAD DE DETERMINAOD CODIGO DE PRODUCTOS
   public function checkAvailabilityOfUserCodeController($code, $table, $nid){
 
@@ -1376,10 +1393,14 @@ class MVC{
 
     $respuesta = Crud::getDetailsFromAlumnoModel($code, $table);
     
-    
-    echo(json_encode($respuesta));
-    
+    echo(json_encode($respuesta));  
   }
+
+  public function getCantidadAlumnos(){
+    $total = Crud::contarAlumnosController();
+    return $total;
+  }
+
 
   public function sesion_caiHeaderAlumnosController(){
     $total = Crud::contarAlumnosController();
@@ -1402,11 +1423,11 @@ class MVC{
   public function sesion_caiHeaderController(){
 
     echo '
-          <div class="info-box mb-3 bg-success">
+          <div id="div_header" class="info-box mb-3 bg-success">
               <span class="info-box-icon"><i class="fa fa-heart-o"></i></span>
 
               <div class="info-box-content">
-                <span class="info-box-text">Ingreso de Alumnos</span>
+                <span id="header_texto_superior" class="info-box-text">Ingreso de Alumnos</span>
                 <div class="row">
                   <div class="col-4">
                   <input type="text" class="form-control" placeholder="Matricula" id="matricula" name="matricula" required="">
@@ -1418,7 +1439,7 @@ class MVC{
                   </select>
                   </div>
                   <div class="col-3">
-                  <button type="button" onClick="insertRow();" class="btn btn-block btn-primary">Ingresar</button>
+                  <button type="button" id="header_insertar_btn" onClick="insertRow();" class="btn btn-block btn-primary">Ingresar</button>
                   </div>
                 </div>
               </div>
@@ -1430,7 +1451,7 @@ class MVC{
             </script>";
   }
 
-    //funcion que crea un select con las carreras registrados 
+  //funcion que crea un select con las carreras registrados 
   //en caso de requerir un select con un valor al principio (al editar algo) se ingresa en $firstID
   public function getSelectForActividades(){
     $informacion = Crud::vistaXTablaModel("actividades"); //se obtienen todos los grupos de la bd mediante la conexion al modelo
@@ -1441,6 +1462,59 @@ class MVC{
     }
   }
 
+  //borra las sesiones que no tengan asistencia (valor 0) en la base de datos y que ademas no pertenezcan
+  //a la sesion actual
+  public function deleteSesionesSinAsistenciaController(){
+    $peticion = Crud::deleteSesionesSinAsistenciaModel();
+    echo $peticion;
+  }
+
+  //funcion que crea un select con los grupos registrados filtrados por el tipo de usuario en sesion
+  public function getSelectForGruposReportes(){
+    if($_SESSION["user_info"]["tipo"]=="teacher") //si es maestro, mandar el id como parametro para filtrar los grupos
+        $informacion = Crud::vistaGruposModel($_SESSION["user_info"]["id"]); //se obtienen todos los grupos de la bd mediante la conexion al modelo
+    else
+      $informacion = Crud::vistaGruposModel(""); //se obtienen todos los grupos de la bd mediante la conexion al modelo
+      foreach ($informacion as $row => $item) { //se imprimen los grupos
+          echo "<option value='".$item['id']."'>".$item['nombre']."</option>";
+    }
+  }
+
+  //funcion que crea un select con las unidades registradas en la bd
+  public function getSelectForUnidades(){
+    $informacion = Crud::vistaXTablaModel("unidades"); //se obtienen todos las las unidades de la bd mediante la conexion al modelo
+    foreach ($informacion as $row => $item) { //se imprimen las unidades a manera de select
+        echo "<option value='".$item['id']."'>".$item['nombre']."</option>";
+    }
+  }
+
+
+ //funcion encargada de crear una tabla con los alumnos de un grupo seleccionado y segun la unidad seleccionada, se filtra el numero de horas registradas en la tabla sesion_cai de la bd
+  public function getReporteController(){
+    if(isset($_POST['btn_filtrar'])){
+      //se obtienen los parametros (id_grupo e id_unidad)  de los selects
+      $data = array(
+      "id_grupo" => $_POST["grupo"],
+      "id_unidad" => $_POST["unidad"]
+
+    );
+    $informacion = Crud::getReporteModel($data);//ejecucion del metodo del modelo
+    if(!empty($informacion)){
+      //si el resultado no esta vacio, imprimir los datos de los usuarios
+        foreach ($informacion as $row => $item) {
+          //se imprimen las filas con la informacion retornada por el modelo
+          echo "<tr>";
+          echo "<td>".$item['matricula']."</td>";
+          echo "<td>".$item['alumnoN']."</td>";
+          echo "<td>".$item['alumnoA']."</td>";
+          echo "<td>".$item['grupo']."</td>";
+          echo "<td>".$item['unidad']."</td>";
+          echo "<td>".$item['numero_horas']."</td>"; 
+          echo "</tr>";
+         }
+      }
+    }
+  }
 
 }
 

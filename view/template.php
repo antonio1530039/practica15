@@ -79,6 +79,19 @@
   <link rel=icon href=./model/images/logo.png>
 </head>
 <body class="hold-transition sidebar-mini">
+<?php
+  //se crea una instancia de la clase controlador
+  $controllerT = new MVC();
+?>
+<script type="text/javascript">
+  //Se definen las variables que contendran el tiempo en toda la aplicacion
+  var start_server_time='<?php echo($controllerT->getServerHourController());?>';
+  var split = start_server_time.split(":");
+  var hour=parseInt(split[0]);
+  var min=parseInt(split[1]);
+  var sec=parseInt(split[2]);
+
+</script>
 
 <div class="wrapper">
   <?php
@@ -88,10 +101,7 @@
   $controller->showNav();
 
   ?>
-    <!-- Ejecutar funcion -->
     <?php
-    //se crea una instancia de la clase controlador
-    $controllerT = new MVC();
     //se ejecuta el metodo enlaces paginas controler que en base al valor de la variable action tomada por el metodo post, se redirecciona a una pagina especificada
     $controllerT->enlacePaginasController();
   ?>
@@ -99,7 +109,7 @@
   </div>
 </div>
 <!-- ./wrapper -->
-  </body>
+</body>
   
 
 
@@ -111,75 +121,50 @@
         var days = new Array("Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado");
         var months = new Array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
 
-        var now = new Date();
-
-        str += days[now.getDay()] + ", " + now.getDate() + " " + months[now.getMonth()] + " " + now.getFullYear() + " ";
-        document.getElementById("fecha").innerHTML = str;
-
-        
+        $.post('view/sesion_cai/sesion_cai.php',
+        {
+          get_date: "bump",  //Variable para definir que es
+        },
+        function(data,status){
+          var split=data.split("-");
+          var now = new Date(split[1]+"-"+split[2]+"-"+split[0]);
+          str += days[now.getDay()] + ", " + now.getDate() + " " + months[now.getMonth()] + " " + now.getFullYear() + " ";
+          document.getElementById("fecha").innerHTML = str;
+        });
       }
 
-      //Retorna una cadena de texto con la hora en formato hh:mm
+      //actualiza la hora en el reloj de la pagina en la parte superior, ademas actualiza los valores
+      //de las variables (hour,min,sec);
       function getTime(){
-         
-        var str = "";
-        var now = new Date();
-
-        str += now.getHours() +":" + now.getMinutes() + ":" + now.getSeconds();
-        document.getElementById("hora").innerHTML = str;
+        sec++;
+        if(sec>59){
+          sec=0;
+          min++;
+          if(min>59){
+            min=0;
+            hour++;
+            if(hour>24){
+              hour=0;
+              getDate();
+            }
+          }
+        }
+        document.getElementById("hora").innerHTML = (hour<10?"0"+hour:hour) +":" + (min<10?"0"+min:min) + ":" + (sec<10?"0"+sec:sec);
       }
 
       //validar si es teacher el usuario, no mostrar la fecha y hora (solo para encargado y superadmin)
-
       var ps = "<?php echo $_SESSION['user_info']['tipo'] ?>";
-
 
       if(ps != "teacher"){
 
         //Mostrado de fecha y hora en la parte superior de la interfaz
-      getDate();
-      getTime();
+        getDate();
+        getTime();
 
-      //Inicializacion de funcion que sera llamada cada 60seg y cada segundo para mostrar la fecha y la hora respectivamente
-      setInterval(getDate, 60000);
-      setInterval(getTime, 1000);
-
-      //Retorna un valor int que identifica el estado de la hora en la que se encuentra el sistema para el control de
-      //asistencia
-      //  Valores:
-      //        Id  Tipo      Descripcion                           Rango
-      //        1   Entrada   Hora de ingresar alumnos              (mm>00 && mm<=10)
-      //        2   Dentro    Los alumnos se encuentran en clase    (mm>10 && mm<=50)
-      //        3   Salida    La hora ha sido concluida (pase de    (mm>50)
-      //                      lista)
-
-      //        0   Descarto  Se descartan las asistencias          (mm>60) misma hora
-
-      //Solo se tienen 10min (min 50 a 60) para confirmar las asistencias sino son descartadas, ocurre caso 0.
-
-
+        //Inicializacion de funcion que sera llamada cada 60seg y cada segundo para mostrar la fecha y la hora respectivamente
+        setInterval(getTime, 1000);
       }
       
-      function getSesionEvent(starting_hour){
-        var now = new Date();
-
-        if(now.getMinutes()>0 && now.getMinutes()<=10){
-          return 1;
-        }else if(now.getMinutes()<10 && now.getMinutes()<=50){
-          return 2;
-        }else if(now.getMinutes()>50 && now.getMinutes()<60){
-          return 3;
-        }else{
-          return 0;
-        }
-      }
-
-      
-
-
-
-     
-
       //funcion de confirmacion de cierre de sesion, muestra un sweet alert
         function confirmLogout(){
             event.preventDefault();
@@ -198,10 +183,9 @@
           });
         }
   
-      //funcion encargada de mostrar un alert cuando el usuario da clic en el boton actualizar y pida la contraseña
-    function c(){
-       var ps = "<?php echo $_SESSION['user_info']['password'] ?>";
-        
+        //funcion encargada de mostrar un alert cuando el usuario da clic en el boton actualizar y pida la contraseña
+        function c(){
+         var ps = "<?php echo $_SESSION['user_info']['password'] ?>";
           event.preventDefault();
 
           swal({
@@ -230,95 +214,96 @@
              $( "#targ" ).click();
             //swal("Exito!", "Registro modificado", "success");
           });
-    }
+        }
      
-    //funcion que se manda llamar al tratar de eliminar algun registro y muestra un sweet alert pidiendo la contraseña del usuario
-    function b(id){
-       var ps = "<?php echo $_SESSION['user_info']['password'] ?>";
-        event.preventDefault();
-        swal({
-          title: "Confirmar baja de registro",
-          text: "<p>Ingresa tu contraseña para dar de baja el registro</p><br><input type='password' class='form-control' id='pass_sw_2' placeholder='Escribe tu contraseña aqui' autofocus><label id='err_sa_2' style='color:red'></label><br>",
-          html: true,
-          
-          type: "error",
-          showCancelButton: true,
-          cancelButtonText: "Cancelar",
-          confirmButtonText: "Confirmar",
-          closeOnConfirm: false,
-          inputPlaceholder: "Escribe tu contraseña aqui",
-        }, function () {
-          var inputValue = document.getElementById("pass_sw_2").value;
-          if (inputValue === false) return false;
-          if (inputValue != ps) {
-            document.getElementById("err_sa_2").innerHTML = "Contraseña incorrecta";
-            return false
-          }
-          var ur = document.getElementById("borrar_btn"+id).href;
-          //alert(ur);
-          window.location = ur;
-          //swal("Exito!", "Registro eliminado", "success");
-        });
-      
-     }
-
-
-     //funcion que despliega un sweet alert con la imagen del alumno
-    function ver_imagen(id){
-        event.preventDefault();
-        swal({
-          title: "Visualizacion de Imagen",
-          text: "<img class='form-control' src='"+document.getElementById("ver_btn"+id).href+"'>",
-          html: true,
-          confirmButtonText: "Cerrar ventana",
-          closeOnConfirm: true
-        });
-        
-      
-     }
-
-    
-
-
-  //crear datable para Historial
-
-    $(document).ready(function() {
-    $('#htable').DataTable({
-      "bSort": false
-});
-     $('#htable2').DataTable({
-      "bSort": false
-});
-} );
-
-
-     $(document).ready(function() {
-    $('#ventasTable').DataTable({
-     "order": [[ 0, "desc" ]],
-     dom: 'Bfrtip',
-      buttons: [
-            'copy', 'csv', 'excel', 'pdf', 'print'
-        ]
-});
-} );
-
-     $(document).ready(function() {
-    $('#detalleVenta').DataTable({
-     dom: 'Bfrtip',
-      buttons: [
-            'copy', 'csv', 'excel', 'pdf', 'print'
-        ]
-});
-} );
-
-      //funciones para cargar algunos datatables y el select2
-          $(function () {
-            $('.select2').select2();
-            $("#example1").DataTable();
-            $("#example2").DataTable();
-            $("#tiendas_desactivadas").DataTable();
+        //funcion que se manda llamar al tratar de eliminar algun registro y muestra un sweet alert pidiendo la contraseña del usuario
+        function b(id){
+         var ps = "<?php echo $_SESSION['user_info']['password'] ?>";
+          event.preventDefault();
+          swal({
+            title: "Confirmar baja de registro",
+            text: "<p>Ingresa tu contraseña para dar de baja el registro</p><br><input type='password' class='form-control' id='pass_sw_2' placeholder='Escribe tu contraseña aqui' autofocus><label id='err_sa_2' style='color:red'></label><br>",
+            html: true,
             
+            type: "error",
+            showCancelButton: true,
+            cancelButtonText: "Cancelar",
+            confirmButtonText: "Confirmar",
+            closeOnConfirm: false,
+            inputPlaceholder: "Escribe tu contraseña aqui",
+          }, function () {
+            var inputValue = document.getElementById("pass_sw_2").value;
+            if (inputValue === false) return false;
+            if (inputValue != ps) {
+              document.getElementById("err_sa_2").innerHTML = "Contraseña incorrecta";
+              return false
+            }
+            var ur = document.getElementById("borrar_btn"+id).href;
+            //alert(ur);
+            window.location = ur;
+            //swal("Exito!", "Registro eliminado", "success");
           });
-      </script> 
+        }
 
+
+        //funcion que despliega un sweet alert con la imagen del alumno
+        function ver_imagen(id){
+          event.preventDefault();
+          swal({
+            title: "Visualizacion de Imagen",
+            text: "<img class='form-control' src='"+document.getElementById("ver_btn"+id).href+"'>",
+            html: true,
+            confirmButtonText: "Cerrar ventana",
+            closeOnConfirm: true
+          });
+        }
+
+        //crear datable para Historial
+        $(document).ready(function() {
+          $('#htable').DataTable({
+            "bSort": false
+          });
+           $('#htable2').DataTable({
+            "bSort": false
+          });
+        });
+
+        $(document).ready(function() {
+          $('#ventasTable').DataTable({
+           "order": [[ 0, "desc" ]],
+           dom: 'Bfrtip',
+            buttons: [
+                  'copy', 'csv', 'excel', 'pdf', 'print'
+            ]
+          });
+        });
+
+        $(document).ready(function() {
+          $('#detalleVenta').DataTable({
+           dom: 'Bfrtip',
+            buttons: [
+                  'copy', 'csv', 'excel', 'pdf', 'print'
+            ]
+          });
+        });
+
+        //funciones para cargar algunos datatables y el select2
+        $(function () {
+          $('.select2').select2();
+          $("#example1").DataTable();
+          $("#example2").DataTable();
+          $("#tiendas_desactivadas").DataTable();
+          
+        });
+
+         //mostrar botones para exportar el contenido del datatable de reportes de sesiones de cai
+        $(document).ready(function() {
+          $('#reporteTable').DataTable({
+           dom: 'Bfrtip',
+            buttons: [
+                  'copy', 'csv', 'excel', 'pdf', 'print'
+              ]
+          });
+        } );
+      </script> 
 </html>
