@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jul 19, 2018 at 01:52 AM
+-- Generation Time: Jul 19, 2018 at 12:08 PM
 -- Server version: 10.1.30-MariaDB
 -- PHP Version: 7.0.27
 
@@ -66,7 +66,8 @@ CREATE TABLE `alumnos` (
 INSERT INTO `alumnos` (`id`, `matricula`, `nombre`, `apellidos`, `id_carrera`, `id_grupo`, `imagen`) VALUES
 (9, '1530039', 'Jose Antonio', 'Molina De la Fuente', 3, 2, 'model/uploads/4fd66ac4c49ae08c5d3afb06bed56a46.png'),
 (11, '1530028', 'Sofia', 'Lopez', 3, 5, 'model/uploads/219f18ec5f7c05a1a8a919b15cabf54f.jpeg'),
-(12, '1530061', 'Erick', 'Elizondo', 3, 2, 'model/uploads/e21ddca0341e25751cf21749635c62a7.png');
+(12, '1530061', 'Erick', 'Elizondo', 3, 2, 'model/uploads/e21ddca0341e25751cf21749635c62a7.png'),
+(13, '1530073', 'Sergio Giovanny', 'Perez Picazo', 3, 5, 'model/uploads/85240d6c464a6550154472db5159f5b0.png');
 
 -- --------------------------------------------------------
 
@@ -132,11 +133,16 @@ CREATE TABLE `sesion_cai` (
 --
 
 INSERT INTO `sesion_cai` (`id`, `hora`, `fecha`, `id_unidad`, `id_alumno`, `id_encargado`, `id_actividad`, `asistencia`) VALUES
-(82, '17:01:11', '2018-07-18', 2, 9, 1, 2, 0),
-(86, '17:59:36', '2018-07-18', 2, 11, 1, 2, 0),
-(88, '18:02:54', '2018-07-18', 2, 9, 1, 2, 0),
-(89, '18:03:02', '2018-07-18', 2, 12, 1, 2, 0),
-(90, '18:09:41', '2018-07-18', 2, 11, 1, 2, 0);
+(113, '00:14:16', '2018-07-19', 2, 9, 1, 2, 1),
+(118, '02:03:57', '2018-07-19', 2, 11, 1, 2, 1),
+(119, '02:04:30', '2018-07-19', 2, 12, 1, 2, 1),
+(123, '03:02:12', '2018-07-19', 2, 11, 1, 2, 1),
+(124, '03:07:30', '2018-07-19', 2, 9, 1, 2, 1),
+(126, '04:00:05', '2018-07-19', 2, 9, 1, 2, 1),
+(128, '05:00:07', '2018-07-19', 2, 12, 1, 2, 0),
+(131, '05:05:15', '2018-07-19', 2, 9, 1, 2, 0),
+(132, '05:05:45', '2018-07-19', 2, 11, 1, 2, 0),
+(133, '05:06:44', '2018-07-19', 2, 13, 1, 2, 0);
 
 -- --------------------------------------------------------
 
@@ -253,7 +259,7 @@ ALTER TABLE `actividades`
 -- AUTO_INCREMENT for table `alumnos`
 --
 ALTER TABLE `alumnos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `carreras`
@@ -271,7 +277,7 @@ ALTER TABLE `grupos`
 -- AUTO_INCREMENT for table `sesion_cai`
 --
 ALTER TABLE `sesion_cai`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=134;
 
 --
 -- AUTO_INCREMENT for table `unidades`
