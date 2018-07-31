@@ -63,6 +63,7 @@
                       </thead>
                       <tbody>
                         <?php 
+                        //mostrar listado de unidades
                         $controller_unidades->getUnidadesController(); 
                          ?>
                       </tbody>

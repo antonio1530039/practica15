@@ -77,7 +77,7 @@
 
                       <br>
                     <div class="table-responsive">
-                    <table width="100%" id="reportesTable" class="table table-bordered table-striped">
+                    <table width="100%" id="example1" class="table table-bordered table-striped">
                       <thead>
                         <th>Matricula</th>
                         <th>Nombre</th>
@@ -85,9 +85,11 @@
                         <th>Grupo</th>
                         <th>Unidad</th>
                         <th>Numero de horas</th>
+                        <th>Ver detalles</th>
                       </thead>
                       <tbody>
                         <?php
+                          //se muestra la tabla contenedora del reporte
                           $controller_reportes->getReporteController();
 
                         ?>

@@ -1,12 +1,12 @@
 <?php
   //instancia de la clase controlador
-  $controller_alumnos = new MVC();
+  $controller_reportes = new MVC();
   //se verifica que se haya iniciado sesion
-  $controller_alumnos->verificarLoginController();
+  $controller_reportes->verificarLoginController();
 
 ?>
   <head>
-    <title>Gestion de Alumnos</title>
+    <title>Detalle de reportes</title>
   </head>
   <body>
   <!-- Content Header (Page header) -->
@@ -14,12 +14,13 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Gestión de Alumnos</h1>
+            <h1 class="m-0 text-dark">Detalle de reporte - Horas realizadas</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="index.php">Inicio</a></li>
-              <li class="breadcrumb-item active">Gestión de Alumnos</li>
+              <li class="breadcrumb-item"><a href="index.php?action=reportes">Reportes</a></li>
+              <li class="breadcrumb-item active">Detalle de reporte</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -38,18 +39,17 @@
             <div class="card card-primary">
               <!-- /.card-header -->
               <!-- form start -->
-              <form role="form">
+              <form role="form" method="POST">
                 <div class="card-body">
-                  <div class="form-group">
-                    <input type="button" class="btn btn-primary" name="btn_back" value="Registrar alumno" onclick="window.location = 'index.php?action=registro_alumno'" style="float: right;">
-                    <br><br>
-                  </div>
+                
                   <div class="form-group">
                     <div class="card">
                       <div class="card-header">
-                        <h3 class="card-title">Listado de alumnos</h3>
+                        <h3 class="card-title">Detalle</h3>
                       </div>
                     <div class="card-body p-0">
+
+
                       <br>
                     <div class="table-responsive">
                     <table width="100%" id="example1" class="table table-bordered table-striped">
@@ -57,17 +57,18 @@
                         <th>Matricula</th>
                         <th>Nombre</th>
                         <th>Apellidos</th>
-                        <th>Carrera</th>
                         <th>Grupo</th>
-                        <th>Imagen</th>
-                        <th></th>
-                        <th></th>
+                        <th>Unidad</th>
+                        <th>Actividad realizada</th>
+                        <th>Fecha</th>
+                        <th>Hora de ingreso</th>
                       </thead>
                       <tbody>
-                        <?php 
-                        //mostrar listado de alumnos 
-                        $controller_alumnos->getAlumnosController($_SESSION['user_info']['id']); 
-                         ?>
+                        <?php
+                          //se muestra la tabla del detalle del reporte
+                          $controller_reportes->getDetalleDeReporteController();
+                        ?>
+                       
                       </tbody>
                     </table>
                     </div>

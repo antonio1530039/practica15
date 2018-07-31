@@ -1,12 +1,9 @@
 <?php
   //instancia de la clase controlador
   $controller_actividades = new MVC();
-
   //se verifica que se haya iniciado sesion
-  
   $controller_actividades->verificarLoginController();
   //se ejecuta el metodo actualizarActividadController para actualizar la act seleccionada
-
   $controller_actividades->actualizarActividadController();
 
 ?>

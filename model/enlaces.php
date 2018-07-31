@@ -24,8 +24,8 @@ class Enlaces{
 			$module = "model/borrar.php";
 		}else if($enlace == "logout"){
 			$module = "model/logout.php";
-		}else if($enlace == "reportes"){
-			$module = "view/$enlace/$enlace.php";
+		}else if($enlace == "reportes" || $enlace == "detalle_reporte"){
+			$module = "view/reportes/$enlace.php";
 		}
 		else{
 			$module = "view/sesion_cai/sesion_cai.php";

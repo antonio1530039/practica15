@@ -16,11 +16,11 @@ class MVC{
 		}
 
 		if(isset($_SESSION["user_info"])){
-			if( ($enlace!= "dashboard" || $enlace != "index" || $enlace != "sesion_cai" || $enlace !="reportes_sesiones") && $_SESSION["user_info"]["tipo"] == "encargado" && $enlace != "logout" && $enlace != "reportes"){
+			if( ($enlace!= "dashboard" || $enlace != "index" || $enlace != "sesion_cai" || $enlace !="reportes_sesiones") && $_SESSION["user_info"]["tipo"] == "encargado" && $enlace != "logout" && $enlace != "reportes" && $enlace != "detalle_reporte"){
 					$enlace = "index";
 			}
 
-			if($enlace != "reportes_sesiones" && $_SESSION["user_info"]["tipo"] == "teacher" && $enlace != "logout" && $enlace != "reportes"){
+			if($enlace != "reportes_sesiones" && $_SESSION["user_info"]["tipo"] == "teacher" && $enlace != "logout" && $enlace != "reportes" && $enlace != "detalle_reporte"){
 				$enlace = "reportes";
 			}		
 		}
@@ -35,7 +35,6 @@ class MVC{
 
     //metodo que verifica si usuario ha iniciado sesion, si no es asi, redireccion al login
 	public function verificarLoginController(){
-		//session_start();
 		if(isset($_SESSION)){
 			if(isset($_SESSION['login'])){
             	if(!$_SESSION['login']){
@@ -48,10 +47,6 @@ class MVC{
 			echo "<script>window.location='index.php?action=login';</script>";
 		}
 	}
-  
-  
-  
-  
   
   //metodo especifico para el archivo header.php o navegacion, el cual verifica si el usuario esta logueado, entonces muestra el menu
  public function showNav(){
@@ -275,63 +270,6 @@ class MVC{
   }
 }
 
-	//funcion que muestra las notificaciones de productos con stock <= 5
-	public function showNotifications(){
-
-		//peticion de productos con stock bajo (menor a 5)
-		$numberOfNotifications = $this->setQueryControllerGetNumber("productos", "stock", "<=", 5);
-
-
-			        $data = $this->setQueryControllerGetData("productos", "stock", "<=", 5); //obtener informacion de productos que cumplen con esa condicion
-
-			        if(!empty($data)){
-			        	echo '
-
-			      	 <!-- Right navbar links -->
-		    			<ul class="navbar-nav ml-auto">
-					        <!-- Notifications Dropdown Menu -->
-				      <li class="nav-item dropdown">
-				        <a class="nav-link" data-toggle="dropdown" href="#">
-				          <i class="fa fa-bell-o">--</i>
-				          <span class="badge badge-danger navbar-badge">'.$numberOfNotifications.'</span>
-				        </a>
-				        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-				          <span class="dropdown-item dropdown-header"> ('.$numberOfNotifications.') Productos con stock bajo</span>
-				        ';
-				        //por cada producto con stock bajo, imprimirlo en la tabla de notificaciones
-			        	foreach ($data as $row => $item) {
-						echo '
-							<div class="dropdown-divider"></div>
-			          <a href="index.php?action=movimiento_inventario" class="dropdown-item">
-			            <i class="fa nav-icon fa fa-cube"></i> '.$item["nombre"].' | Stock: '.$item["stock"].'
-			            <span class="float-right text-muted text-sm"></span>
-			          </a>
-						';
-						}
-
-			        }else{
-			        	echo '
-
-			      	 <!-- Right navbar links -->
-		    			<ul class="navbar-nav ml-auto">
-					        <!-- Notifications Dropdown Menu -->
-				      <li class="nav-item dropdown">
-				        <a class="nav-link" data-toggle="dropdown" href="#">
-				          <i class="fa fa-bell-o"></i>
-				        </a>
-				        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-				          <span class="dropdown-item dropdown-header">No tienes notificaciones</span>
-				        ';
-
-			        }
-
-
-					echo '
-
-
-			      </li>
-			      </ul>';
-	}
 
   	//funcion encargada de ingresar los valores del login e iniciar sesion
 	public function ingresoUsuarioController(){
@@ -574,15 +512,20 @@ class MVC{
 		if(!empty($informacion)){
 			if($firstID==""){
 				foreach ($informacion as $row => $item) {
-						echo "<option value='".$item['id']."'>".$item['nombre']."</option>";
+						$petic = Crud::getRegModel($item["id_maestro"], "usuarios");
+          echo "<option value='".$item['id']."'>".$item['nombre']."  ". $petic["nombre"]." " .$petic["apellidos"] ."</option>";
 				}
 			}else{
 				$reg = Crud::getRegModel($firstID, "grupos");
 				//se coloca primero la opcion del select del grupo
-				echo "<option value='".$reg['id']."'>".$reg['nombre']."</option>";
+        $petic = Crud::getRegModel($reg["id_maestro"], "usuarios");
+          
+				echo "<option value='".$reg['id']."'>".$reg['nombre']."  ". $petic["nombre"]." " .$petic["apellidos"] ."</option>";
 				foreach ($informacion as $row => $item) { //se imprimen los grupos restantes
-					if($item['id']!=$firstID)
-						echo "<option value='".$item['id']."'>".$item['nombre']."</option>";
+					if($item['id']!=$firstID){
+						$petic = Crud::getRegModel($item["id_maestro"], "usuarios");
+            echo "<option value='".$item['id']."'>".$item['nombre']."  ". $petic["nombre"]." " .$petic["apellidos"] ."</option>";
+          }
 				}
 			}
 			
@@ -947,7 +890,6 @@ class MVC{
      
 		}else{
       		echo "<script>window.location='index.php?action=usuarios';</script>";
-
       	}
 	}
 
@@ -1270,7 +1212,7 @@ class MVC{
     $peticion = Crud::getServerHour();
     echo $peticion;
   }
-
+  //funcion encargada de obtener la fecha del servidor
   public function getServerDateController(){
     $peticion = Crud::getServerDate();
     echo $peticion;
@@ -1344,16 +1286,6 @@ class MVC{
 		}
 	}
 
-	/*
-	//funcion que muestra el dashboard del sistema
-	function showDashboard(){
-		//mostrar productos sin stock
-		$this->setQueryController("productos","Productos sin stock", "stock", "=",0, $_SESSION['tienda']);
-
-		$this->setQueryController("transaccion","Transacciones realizadas hoy", "fecha", "=", date('Y-m-d'), $_SESSION['tienda']);
-		
-	}*/
-
 
 	//Funcion que dado un id y nombre de tabla, ejecuta el metodo del modelo y borra el registro especificado en base a la tabla
 	public function borrarController($id, $tabla){
@@ -1396,12 +1328,13 @@ class MVC{
     echo(json_encode($respuesta));  
   }
 
+  //funcion encargada de contar los alumnos en la sesion actual
   public function getCantidadAlumnos(){
     $total = Crud::contarAlumnosController();
     return $total;
   }
 
-
+  //funcion encargada de mostrar el widget de alumnos en aula
   public function sesion_caiHeaderAlumnosController(){
     $total = Crud::contarAlumnosController();
     echo'
@@ -1420,6 +1353,7 @@ class MVC{
       </div>';
   }
 
+  //funcion encargada de poner la interfaz de ingreso de de alumnos a la sesion, (campo de texto para matricula y la actividad)
   public function sesion_caiHeaderController(){
 
     echo '
@@ -1476,7 +1410,8 @@ class MVC{
     else
       $informacion = Crud::vistaGruposModel(""); //se obtienen todos los grupos de la bd mediante la conexion al modelo
       foreach ($informacion as $row => $item) { //se imprimen los grupos
-          echo "<option value='".$item['id']."'>".$item['nombre']."</option>";
+          $petic = Crud::getRegModel($item["id_maestro"], "usuarios");
+          echo "<option value='".$item['id']."'>".$item['nombre']."  ". $petic["nombre"]." " .$petic["apellidos"] ."</option>";
     }
   }
 
@@ -1509,11 +1444,43 @@ class MVC{
           echo "<td>".$item['alumnoA']."</td>";
           echo "<td>".$item['grupo']."</td>";
           echo "<td>".$item['unidad']."</td>";
-          echo "<td>".$item['numero_horas']."</td>"; 
+          echo "<td>".$item['numero_horas']."</td>";
+          echo "<td>"."<a class='btn btn-success fa fa-sticky-note-o' href='index.php?action=detalle_reporte&id_alumno=".$item['id']."&id_unidad=".$_POST["unidad"] ."'></a></td>";  
           echo "</tr>";
          }
       }
     }
+  }
+
+
+  // dado un id de un alumno, y el id de una unidad, se obtienen las actividades realizadas en cada hora en esa unidad por el aluno y se muestra el contenido a manera de tablas
+  public function getDetalleDeReporteController(){
+      $id_alumno = (isset($_GET['id_alumno'])) ? $_GET['id_alumno'] : ""; //verificacion del id del alumno
+      $id_unidad = (isset($_GET['id_unidad'])) ? $_GET['id_unidad'] : ""; //verificacion del id de la unidad
+
+
+      //se obtienen los parametros (id_grupo e id_unidad)  de los selects
+      $data = array(
+      "id_alumno" =>  $id_alumno,
+      "id_unidad" => $id_unidad
+    );
+    $informacion = Crud::getDetalleDeReporteModel($data);//ejecucion del metodo del modelo
+    if(!empty($informacion)){
+      //si el resultado no esta vacio, imprimir los datos de los usuarios
+        foreach ($informacion as $row => $item) {
+          //se imprimen las filas con la informacion retornada por el modelo
+          echo "<tr>";
+          echo "<td>".$item['matricula']."</td>";
+          echo "<td>".$item['nombre']."</td>";
+          echo "<td>".$item['apellidos']."</td>";
+          echo "<td>".$item['nombreGrupo']."</td>";
+          echo "<td>".$item['nombreUnidad']."</td>";
+          echo "<td>".$item['nombreActividad']."</td>"; 
+          echo "<td>".$item['fecha']."</td>"; 
+          echo "<td>".$item['hora']."</td>"; 
+          echo "</tr>";
+         }
+      }
   }
 
 }

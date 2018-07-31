@@ -1,12 +1,9 @@
 <?php
   //instancia de la clase controlador
   $controller_unidades = new MVC();
-
   //se verifica que se haya iniciado sesion
-  
   $controller_unidades->verificarLoginController();
   //se ejecuta el metodo  para actualizar la unidad seleccionada
-
   $controller_unidades->actualizarUnidadController();
 
 ?>

@@ -12,10 +12,8 @@
   $controller_alumnos = new MVC();
 
   //se verifica que se haya iniciado sesion
-  
   $controller_alumnos->verificarLoginController();
   //se ejecuta el metodo actualizarAlumnoController para actualizar el alumno seleccionado
-
   $controller_alumnos->actualizarAlumnoController();
 ?>
 

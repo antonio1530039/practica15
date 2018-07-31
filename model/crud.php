@@ -358,7 +358,7 @@ class Crud extends Conexion{
 	//metodo getReporteModel: dado un arreglo asociativo de datos, se obtienen los alumnos de un grupo y se filtra el numero de horas, segun la unidad y el id de grupo enviados como parametros
 	public function getReporteModel($data){
 		//Consulta SQL para traer las horas de los alumnos del grupo seleccionado segun el id de la unidad
-		$stmt = Conexion::conectar()->prepare("SELECT a.matricula as matricula, a.nombre as alumnoN, a.apellidos as alumnoA, u.nombre as unidad ,SUM(sc.asistencia) as numero_horas, g.nombre as grupo
+		$stmt = Conexion::conectar()->prepare("SELECT a.id as id, a.matricula as matricula, a.nombre as alumnoN, a.apellidos as alumnoA, u.nombre as unidad ,SUM(sc.asistencia) as numero_horas, g.nombre as grupo
 			FROM grupos as g
 			INNER JOIN alumnos as a ON g.id = a.id_grupo
 			INNER JOIN sesion_cai as sc on a.id = sc.id_alumno
@@ -367,6 +367,25 @@ class Crud extends Conexion{
 			GROUP BY sc.id_alumno");
 		//preparacion de parametros
 		$stmt->bindParam(":id_grupo", $data['id_grupo']);
+		$stmt->bindParam(":id_unidad", $data['id_unidad']);
+		$stmt->execute(); //ejecucion de la consulta
+		return $stmt->fetchAll(); //se retorna en un array asociativo el resultado de la consulta
+		$stmt->close();
+	}
+
+	//metodo getDetalleDeReporteModel: dado un id de un alumno, y el id de una unidad, se obtienen las actividades realizadas en cada hora en esa unidad 
+	public function getDetalleDeReporteModel($data){
+		//Consulta SQL para traer las horas de los alumnos del grupo seleccionado segun el id de la unidad
+		$stmt = Conexion::conectar()->prepare("SELECT al.matricula as matricula, al.nombre as nombre, al.apellidos as apellidos, g.nombre as nombreGrupo, u.nombre as nombreUnidad,  a.nombre as nombreActividad, sc.fecha as fecha, sc.hora as hora
+FROM sesion_cai as sc INNER JOIN actividades as a ON sc.id_actividad = a.id
+INNER JOIN unidades as u on u.id = sc.id_unidad
+INNER JOIN alumnos as al on al.id = sc.id_alumno
+INNER JOIN grupos as g on g.id = al.id_grupo
+WHERE sc.id_alumno = :id_alumno and sc.id_unidad = :id_unidad and sc.asistencia = 1
+
+			");
+		//preparacion de parametros
+		$stmt->bindParam(":id_alumno", $data['id_alumno']);
 		$stmt->bindParam(":id_unidad", $data['id_unidad']);
 		$stmt->execute(); //ejecucion de la consulta
 		return $stmt->fetchAll(); //se retorna en un array asociativo el resultado de la consulta

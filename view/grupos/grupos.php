@@ -3,7 +3,6 @@
   $controller_grupos = new MVC();
   //se verifica que se haya iniciado sesion
   $controller_grupos->verificarLoginController();
-
 ?>
   <head>
     <title>Gestion de Grupos</title>
@@ -62,7 +61,7 @@
                       </thead>
                       <tbody>
                         <?php 
-                        //listado de usuarios
+                        //listado de grupos
                         $controller_grupos->getGruposController(); 
                          ?>
                       </tbody>

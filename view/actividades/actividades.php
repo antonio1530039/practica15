@@ -61,7 +61,7 @@
                       </thead>
                       <tbody>
                         <?php 
-                        //listado de usuarios
+                        //listado de actividades
                         $controller_actividades->getActividadesController(); 
                          ?>
                       </tbody>

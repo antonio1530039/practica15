@@ -1,12 +1,9 @@
 <?php
   //instancia de la clase controlador
   $controller_carreras = new MVC();
-
   //se verifica que se haya iniciado sesion
-  
   $controller_carreras->verificarLoginController();
   //se ejecuta el metodo actualizarCarreraController para actualizar la carrera seleccionada
-
   $controller_carreras->actualizarCarreraController();
 
 ?>

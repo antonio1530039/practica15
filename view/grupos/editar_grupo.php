@@ -1,14 +1,10 @@
 <?php
   //instancia de la clase controlador
   $controller_grupos = new MVC();
-
   //se verifica que se haya iniciado sesion
-  
   $controller_grupos->verificarLoginController();
   //se ejecuta el metodo actualizarGrupoController para actualizar el grupo seleccionado
-
   $controller_grupos->actualizarGrupoController();
-
 ?>
 
 
