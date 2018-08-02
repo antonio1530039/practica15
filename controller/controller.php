@@ -1363,10 +1363,18 @@ class MVC{
               <div class="info-box-content">
                 <span id="header_texto_superior" class="info-box-text">Ingreso de Alumnos</span>
                 <div class="row">
-                  <div class="col-4">
-                  <input type="text" class="form-control" placeholder="Matricula" id="matricula" name="matricula" required="">
+                  <div class="col-6">
+                  <select class="select2 form-control" id="matricula" name="matricula" requiered="">
+                  ';
+                  $this->getSelectForAlumnos();
+      echo '
+                  
+                  </select>
+                  
+                  
+                  
                   </div>
-                  <div class="col-4">
+                  <div class="col-2">
                   <select name="" id="actividad_sel" class="form-control select2">';
                   $this->getSelectForActividades();
     echo  '
@@ -1385,13 +1393,24 @@ class MVC{
             </script>";
   }
 
-  //funcion que crea un select con las carreras registrados 
+  //funcion que crea un select con las actividades registradas 
   //en caso de requerir un select con un valor al principio (al editar algo) se ingresa en $firstID
   public function getSelectForActividades(){
     $informacion = Crud::vistaXTablaModel("actividades"); //se obtienen todos los grupos de la bd mediante la conexion al modelo
     if(!empty($informacion)){
       foreach ($informacion as $row => $item) {
           echo "<option value='".$item['id']."'>".$item['nombre']."</option>";
+      }
+    }
+  }
+  
+  //funcion que crea un select con los alumnos registrados 
+  //en caso de requerir un select con un valor al principio (al editar algo) se ingresa en $firstID
+  public function getSelectForAlumnos(){
+    $informacion = Crud::vistaXTablaModel("alumnos"); //se obtienen todos los grupos de la bd mediante la conexion al modelo
+    if(!empty($informacion)){
+      foreach ($informacion as $row => $item) {
+          echo "<option value='".$item['matricula']."'>".$item['matricula']." | ". $item["nombre"]." ".$item["apellidos"]."</option>";
       }
     }
   }

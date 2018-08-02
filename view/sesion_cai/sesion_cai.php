@@ -205,7 +205,7 @@
                         'Hora_de_entrada': json_respInsert[1],
                         'Imagen': '<td><a href="'+json_respArray[2]+'" id="ver_btn'+json_respInsert[0]+'" onClick="ver_imagen('+json_respInsert[0]+');">Ver</a></td>',
                         'Remover':  "<td><button type='button' id='borrar-"+json_respInsert[0]+"-"+$('#matricula').val()+"' class='btn btn-danger'><i class='fa fa-close'></i></button></td>",
-                        'Asistencia': "<td><button type='button' id='asistencia-"+json_respInsert[0]+"-"+$('#matricula').val()+"' class='btn btn-warning'><i class='fa fa-close'></i></button></td>"
+                        'Asistencia': "<td><button type='button' id='asistencia-"+json_respInsert[0]+"-"+$('#matricula').val()+"' class='btn btn-success'><i class='fa fa-check'></i></button></td>"
                       }).draw();
                       //Se agrega la matricula actual al array que contiene todas las matriculas
                       matriculas_dentro.push($('#matricula').val());
