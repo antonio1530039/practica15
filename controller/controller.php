@@ -1464,7 +1464,7 @@ class MVC{
           echo "<td>".$item['grupo']."</td>";
           echo "<td>".$item['unidad']."</td>";
           echo "<td>".$item['numero_horas']."</td>";
-          echo "<td>"."<a class='btn btn-success fa fa-sticky-note-o' href='index.php?action=detalle_reporte&id_alumno=".$item['id']."&id_unidad=".$_POST["unidad"] ."'></a></td>";  
+          echo "<td>"."<a class='btn btn-success fa fa-sticky-note-o' target='_blank' href='index.php?action=detalle_reporte&id_alumno=".$item['id']."&id_unidad=".$_POST["unidad"] ."'></a></td>";  
           echo "</tr>";
          }
       }
