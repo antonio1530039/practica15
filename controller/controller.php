@@ -1450,7 +1450,6 @@ class MVC{
       $data = array(
       "id_grupo" => $_POST["grupo"],
       "id_unidad" => $_POST["unidad"]
-
     );
     $informacion = Crud::getReporteModel($data);//ejecucion del metodo del modelo
     if(!empty($informacion)){
@@ -1468,6 +1467,10 @@ class MVC{
           echo "</tr>";
          }
       }
+      echo "<script>
+              $('#grupo_sel').val('".$_POST["grupo"]."');
+              $('#unidad_sel').val('".$_POST["unidad"]."');
+            </script>";
     }
   }
 
@@ -1476,29 +1479,36 @@ class MVC{
   public function getDetalleDeReporteController(){
       $id_alumno = (isset($_GET['id_alumno'])) ? $_GET['id_alumno'] : ""; //verificacion del id del alumno
       $id_unidad = (isset($_GET['id_unidad'])) ? $_GET['id_unidad'] : ""; //verificacion del id de la unidad
-
-
+      //se obtiene la informacion a mostrar del nombre del alumno, nombre de unidad, nombre de grupo y nombre de teacher
+      $infoAlumno = Crud::getRegModel($id_alumno, "alumnos");
+      $infoUnidad = Crud::getRegModel($id_unidad, "unidades");
+      $infoGrupo = Crud::getRegModel($infoAlumno['id_grupo'], "grupos");
+      $infoMaestro = Crud::getRegModel($infoGrupo['id_maestro'], "usuarios");
+      //se muestran los valores con javascript en los controles correspondientes
+      echo "<script>
+        $('#info_alumno').text('". $infoAlumno['nombre'] ." ". $infoAlumno['apellidos']."');
+        $('#info_grupo').text('". $infoGrupo['nombre']."');
+        $('#info_teacher').text('". $infoMaestro['nombre']." ".$infoMaestro["apellidos"] ."');
+        $('#info_unidad').text('". $infoUnidad['nombre']."');
+      </script>";
       //se obtienen los parametros (id_grupo e id_unidad)  de los selects
       $data = array(
       "id_alumno" =>  $id_alumno,
       "id_unidad" => $id_unidad
-    );
+      );
     $informacion = Crud::getDetalleDeReporteModel($data);//ejecucion del metodo del modelo
     if(!empty($informacion)){
       //si el resultado no esta vacio, imprimir los datos de los usuarios
         foreach ($informacion as $row => $item) {
           //se imprimen las filas con la informacion retornada por el modelo
           echo "<tr>";
-          echo "<td>".$item['matricula']."</td>";
-          echo "<td>".$item['nombre']."</td>";
-          echo "<td>".$item['apellidos']."</td>";
-          echo "<td>".$item['nombreGrupo']."</td>";
-          echo "<td>".$item['nombreUnidad']."</td>";
           echo "<td>".$item['nombreActividad']."</td>"; 
           echo "<td>".$item['fecha']."</td>"; 
           echo "<td>".$item['hora']."</td>"; 
           echo "</tr>";
          }
+      }else{
+        
       }
   }
 

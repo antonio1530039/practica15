@@ -45,20 +45,37 @@
                   <div class="form-group">
                     <div class="card">
                       <div class="card-header">
-                        <h3 class="card-title">Detalle</h3>
+                        <h3 class="card-title">Detalle de horas realizadas</h3>
                       </div>
                     <div class="card-body p-0">
 
 
-                      <br>
+                      
+                      <div class="table-responsive">
+                      <table width="100%" class="table table-bordered table-striped">
+                      <thead>
+                        <th>Alumno</th>
+                        <th>Grupo</th>
+                        <th>Teacher</th>
+                        <th>Unidad</th>
+                      </thead>
+                      <tbody>
+                        <td><label class="" id="info_alumno"></label></td>
+
+                        <td><label class="" id="info_grupo"></label></td>
+
+                        <td><label class="" id="info_teacher"></label></td>
+                       
+                        <td><label class="" id="info_unidad"></label></td>
+                      </tbody>
+                    </table>
+                  </div>
+
+
+
                     <div class="table-responsive">
                     <table width="100%" id="example1" class="table table-bordered table-striped">
                       <thead>
-                        <th>Matricula</th>
-                        <th>Nombre</th>
-                        <th>Apellidos</th>
-                        <th>Grupo</th>
-                        <th>Unidad</th>
                         <th>Actividad realizada</th>
                         <th>Fecha</th>
                         <th>Hora de ingreso</th>

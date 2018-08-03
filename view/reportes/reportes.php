@@ -45,7 +45,7 @@
                     <div class="row">
                       <div class="col-6">
                         <label>Grupo:</label>
-                        <select class="form-control select2" name="grupo" required="">
+                        <select class="form-control select2" name="grupo" id="grupo_sel" required="">
                          <?php
                           $controller_reportes->getSelectForGruposReportes();
                          ?>
@@ -53,7 +53,7 @@
                       </div>
                       <div class="col-3">
                         <label>Unidad:</label>
-                        <select class="form-control select2" name="unidad" required="">
+                        <select class="form-control select2" name="unidad" id="unidad_sel" required="">
                           <?php $controller_reportes->getSelectForUnidades(); ?>
                         </select>
                       </div>
@@ -77,7 +77,7 @@
 
                       <br>
                     <div class="table-responsive">
-                    <table width="100%" id="reportes" class="table table-bordered table-striped">
+                    <table width="100%" id="reporteTable" class="table table-bordered table-striped">
                       <thead>
                         <th>Matricula</th>
                         <th>Nombre</th>

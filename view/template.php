@@ -258,35 +258,6 @@
           });
         }
 
-        //crear datable para Historial
-        $(document).ready(function() {
-          $('#htable').DataTable({
-            "bSort": false
-          });
-           $('#htable2').DataTable({
-            "bSort": false
-          });
-        });
-
-        $(document).ready(function() {
-          $('#reportes').DataTable({
-           "order": [[ 0, "desc" ]],
-           dom: 'Bfrtip',
-            buttons: [
-                  'copy', 'csv', 'excel', 'pdf', 'print'
-            ]
-          });
-        });
-
-        $(document).ready(function() {
-          $('#detalleVenta').DataTable({
-           dom: 'Bfrtip',
-            buttons: [
-                  'copy', 'csv', 'excel', 'pdf', 'print'
-            ]
-          });
-        });
-
         //funciones para cargar algunos datatables y el select2
         $(function () {
           $('.select2').select2();
