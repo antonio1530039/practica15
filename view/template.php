@@ -269,7 +269,7 @@
         });
 
         $(document).ready(function() {
-          $('#ventasTable').DataTable({
+          $('#reportes').DataTable({
            "order": [[ 0, "desc" ]],
            dom: 'Bfrtip',
             buttons: [
