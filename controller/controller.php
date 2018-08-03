@@ -1358,7 +1358,7 @@ class MVC{
 
     echo '
           <div id="div_header" class="info-box mb-3 bg-success">
-              <span class="info-box-icon"><i class="fa fa-heart-o"></i></span>
+              <span class="info-box-icon"><i class="fa fa-hourglass-end"></i></span>
 
               <div class="info-box-content">
                 <span id="header_texto_superior" class="info-box-text">Ingreso de Alumnos</span>
