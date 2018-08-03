@@ -361,7 +361,7 @@ class MVC{
               echo "<td>".$item['hora']."</td>";
               echo '<td><a href="'.$item["imagen"].'" id="ver_btn'.$item["id_alumno"].'" onclick="ver_imagen('.$item["id_alumno"].');">Ver</a></td>';
               echo "<td><button type='button' id='borrar-".$item['id']."-".$item['matricula']."' class='btn btn-danger'><i class='fa fa-close'></i></button></td>";
-              echo "<td><button type='button' id='asistencia-".$item['id']."-".$item['matricula']."' class='btn btn-warning'><i class='fa fa-close'></i></button></td>";
+              echo "<td><button type='button' id='asistencia-".$item['id']."-".$item['matricula']."' class='btn btn-success'><i class='fa fa-check'></i></button></td>";
               //echo "<td><div class='checkbox'><label><input class='form_control' type='checkbox'></div></td>";
             echo "</tr>";
           }

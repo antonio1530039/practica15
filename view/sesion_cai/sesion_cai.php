@@ -364,6 +364,8 @@
                 matriculas_dentro=[];
                 tbl.clear().draw();
               }         
+              $("#alumnos_dentro").text("0/30");
+              $("#porcentage_dentro").css("width",0);
               $("#div_header").attr("class","info-box mb-3 bg-success");
               $('#matricula').show();
               $("#actividad_sel").parent().parent().show();
