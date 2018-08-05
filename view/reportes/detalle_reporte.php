@@ -74,7 +74,7 @@
 
 
                     <div class="table-responsive">
-                    <table width="100%" id="example1" class="table table-bordered table-striped">
+                    <table width="100%" id="reporteTable" class="table table-bordered table-striped">
                       <thead>
                         <th>Actividad realizada</th>
                         <th>Fecha</th>
