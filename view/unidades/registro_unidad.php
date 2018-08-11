@@ -50,7 +50,7 @@
                   <div class="form-group">
                     <p>
                     <label>Nombre</label>
-                    <input type="text" class="form-control" name="nombre" placeholder="Ingresa el nombre de la actividad" required="">
+                    <input type="text" class="form-control" name="nombre" placeholder="Ingresa el nombre de la unidad" required="">
                   </p>
                   </div>
                    <div class="form-group">
