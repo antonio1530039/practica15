@@ -176,7 +176,6 @@
                 function(data,status){
                   var json_respArray = JSON.parse(data);  //Se obtienen varios atributos del alumno con la matricula ingresada
                                                           // (Id, nombre y fotografia)
-
                   //Obtener el id de la unidad
                   $.post('view/sesion_cai/sesion_cai.php',
                   {
@@ -186,37 +185,48 @@
                     id_unidad=data;                   //Id obtenido de la consulta
                     nombre_alumno=json_respArray[1];  //Nombre
 
-                    //Se realiza la insercion a la base de datos de la sesion actual
-                    $.post('view/sesion_cai/sesion_cai.php',
-                    {
-                      id_unidad: id_unidad,
-                      id_alumno: json_respArray[0],
-                      id_actividad: $('#actividad_sel').find(":selected").val(),
-                      id_encargado: id_encargado_val,
-                      asistencia: 0
-                    },
-                    function(data,status){
-                      var json_respInsert = JSON.parse(data); //Se obtienen de resultados el id[0] y la matricula[1]
-                      //Se agrega la fila al datatable
-                      tbl.row.add({
-                        'Matricula': $('#matricula').val(),
-                        'Nombre': nombre_alumno,
-                        'Actividad': $('#actividad_sel').find(":selected").text(),
-                        'Hora_de_entrada': json_respInsert[1],
-                        'Imagen': '<td><a href="'+json_respArray[2]+'" id="ver_btn'+json_respInsert[0]+'" onClick="ver_imagen('+json_respInsert[0]+');">Ver</a></td>',
-                        'Remover':  "<td><button type='button' id='borrar-"+json_respInsert[0]+"-"+$('#matricula').val()+"' class='btn btn-danger'><i class='fa fa-close'></i></button></td>",
-                        'Asistencia': "<td><button type='button' id='asistencia-"+json_respInsert[0]+"-"+$('#matricula').val()+"' class='btn btn-success'><i class='fa fa-check'></i></button></td>"
-                      }).draw();
-                      //Se agrega la matricula actual al array que contiene todas las matriculas
-                      matriculas_dentro.push($('#matricula').val());
-                      //Se actualiza el contador de los alumnos
-                      updateAlumnos();
+                    //Se verifia que la unidad exista, sino se muestra un mensaje de error
+                    if(id_unidad==null || id_unidad==""){
+                    	swal({
+		                    title: 'No existe unidad actual',
+		                    text: 'En el sistema no existe una unidad que este activa actualmente, por favor, registre una '+
+		                    	'unidad nueva para poder ingresar alumnos a la sesion',
+		                    type: 'warning',
+		                    buttons: true,
+		                  });
+                    }else{
+	                    //Se realiza la insercion a la base de datos de la sesion actual
+	                    $.post('view/sesion_cai/sesion_cai.php',
+	                    {
+	                      id_unidad: id_unidad,
+	                      id_alumno: json_respArray[0],
+	                      id_actividad: $('#actividad_sel').find(":selected").val(),
+	                      id_encargado: id_encargado_val,
+	                      asistencia: 0
+	                    },
+	                    function(data,status){
+	                      var json_respInsert = JSON.parse(data); //Se obtienen de resultados el id[0] y la matricula[1]
+	                      //Se agrega la fila al datatable
+	                      tbl.row.add({
+	                        'Matricula': $('#matricula').val(),
+	                        'Nombre': nombre_alumno,
+	                        'Actividad': $('#actividad_sel').find(":selected").text(),
+	                        'Hora_de_entrada': json_respInsert[1],
+	                        'Imagen': '<td><a href="'+json_respArray[2]+'" id="ver_btn'+json_respInsert[0]+'" onClick="ver_imagen('+json_respInsert[0]+');">Ver</a></td>',
+	                        'Remover':  "<td><button type='button' id='borrar-"+json_respInsert[0]+"-"+$('#matricula').val()+"' class='btn btn-danger'><i class='fa fa-close'></i></button></td>",
+	                        'Asistencia': "<td><button type='button' id='asistencia-"+json_respInsert[0]+"-"+$('#matricula').val()+"' class='btn btn-success'><i class='fa fa-check'></i></button></td>"
+	                      }).draw();
+	                      //Se agrega la matricula actual al array que contiene todas las matriculas
+	                      matriculas_dentro.push($('#matricula').val());
+	                      //Se actualiza el contador de los alumnos
+	                      updateAlumnos();
 
-                      //Se prepara para nueva insercion
-                      $("#matricula").val("");
-                      $("#matricula").focus();
-                      $("#error_div").hide();
-                    });
+	                      //Se prepara para nueva insercion
+	                      $("#matricula").val("");
+	                      $("#matricula").focus();
+	                      $("#error_div").hide();
+	                    });
+	                }
                   });
                 });
               }else{
